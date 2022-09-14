@@ -25,7 +25,7 @@ class TestStartPage:
 
         # Fill login
         login = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Username']")
-        login.send_keys("User11")
+        login.send_keys("User112")
         sleep(1)
 
         # Fill password
