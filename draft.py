@@ -20,9 +20,11 @@ def open_start_page(chrome_driver):
     # Open start page
     return chrome_driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
 
+    """-----REGISTRATION-----"""
 
-class TestStartPage:
-    log = logging.getLogger("[StartPage]")
+
+class TestRegistration:
+    log = logging.getLogger("[Registration]")
 
     @staticmethod
     def random_num():
@@ -33,8 +35,6 @@ class TestStartPage:
     def random_str(length=5):
         """Generate random string"""
         return ''.join(random.choice(string.ascii_letters) for _ in range(length))
-
-    """-----REGISTRATION-----"""
 
     def test_empty_fields_validation(self, chrome_driver, open_start_page):
         """
@@ -51,7 +51,7 @@ class TestStartPage:
         sign_up_button = chrome_driver.find_element(by=By.XPATH,
                                                     value=".//button[text()='Sign up for OurApp']")
         sign_up_button.click()
-        sleep(0.5)
+        sleep(1)
 
         # Verify validation messages above login, email and password fields
         empty_login_validation = chrome_driver.find_element(by=By.XPATH,
@@ -87,7 +87,7 @@ class TestStartPage:
         email = chrome_driver.find_element(by=By.XPATH, value=".//input[@id='email-register']")
         email.clear()
         email.send_keys(email_value)
-        sleep(0.5)
+        sleep(1)
 
         # Fill password
         password_value = f"{self.random_str(6)}{self.random_num()}"
@@ -95,17 +95,17 @@ class TestStartPage:
         password.clear()
         password.send_keys(password_value)
         self.log.info("Fields were filled")
-        sleep(0.5)
+        sleep(1)
 
         # Fill login
         username = chrome_driver.find_element(by=By.XPATH, value=".//input[@id='username-register']")
         taken_login = "nicewarthog"
         username.send_keys(taken_login)
-        sleep(0.5)
+        sleep(1)
 
         # Click Sign Up button
         chrome_driver.find_element(by=By.XPATH, value=".//button[text()='Sign up for OurApp']").click()
-        sleep(0.5)
+        sleep(1)
 
         # Verify error
         login_is_taken_message = chrome_driver.find_element(by=By.XPATH,
@@ -140,16 +140,16 @@ class TestStartPage:
 
         # Open page
         driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
-        sleep(0.5)
+        sleep(1)
 
         # Fill login
         username = driver.find_element(by=By.XPATH,
                                        value=".//input[@id='username-register']")
-        sleep(0.5)
+        sleep(1)
         username.send_keys(login)
-        sleep(0.5)
+        sleep(1)
         driver.find_element(by=By.XPATH, value=".//button[text()='Sign up for OurApp']").click()
-        sleep(0.5)
+        sleep(1)
         if len(login) < 3:
             s2_login_validation = driver.find_element(by=By.XPATH,
                                                       value=".//div[contains(text(),'Username must be at least 3 characters.')]")
@@ -170,63 +170,127 @@ class TestStartPage:
         # Close driver
         driver.close()
 
-    def test_success_registration(self, chrome_driver, open_start_page):
+    # Успішна реєстрація. Гірший варіант, без фікстур
+    def test_correct_registration(self, randomword):
         """
-        Fixture:
+        Steps:
         - Create driver
         - Open page
-        Steps:
-        - Fill username, email, password
-        - Click Sign Up button
-        - Verify success registration
+        - Fill username
+        - Fill email
+        - Fill password
+        - Click button
+        - Verify registration
         """
 
+        # Create driver
+        driver = webdriver.Chrome(r"\Users\nicewarthog\PycharmProjects\QAAppG6\chromedriver.exe")
+
+        # Open page
+        driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
+        sleep(1)
+
         # Fill login
-        username_value = f"{self.random_str()}{self.random_num()}"
-        username = chrome_driver.find_element(by=By.XPATH,
-                                              value=".//input[@id='username-register']")
+        login = driver.find_element(by=By.XPATH, value=".//input[@id='username-register']")
+
+        login.send_keys(randomword, "name")
+        sleep(1)
+
+        # Fill email
+        email = driver.find_element(by=By.XPATH, value=".//input[@id='email-register']")
+        email.send_keys(randomword, "@mail.com")
+        sleep(1)
+
+        # Fill password
+        password = driver.find_element(by=By.XPATH, value=".//input[@id='password-register']")
+        password.send_keys(randomword, "pass")
+        sleep(1)
+
+        # Click button
+        button = driver.find_element(by=By.XPATH, value=".//button[text()='Sign up for OurApp']")
+        button.click()
+        sleep(1)
+
+        # Verify success
+        success_element = driver.find_element(by=By.XPATH, value=".//button[text()='Sign Out']")
+        assert success_element.text == "Sign Out", f"Actual message: {success_element.text}"
+        self.log.info(
+            f"Результат теста - відображається кнопка виходу з аккаунта з текстом {success_element.text}")
+
+        # Close driver
+        driver.close()
+
+    # Успішна реєстрація. Кращій варіант
+    def test_success_registration(self, chrome_driver, open_start_page):
+        """
+        Steps:
+        - Open start page
+        - Fill username, email, password
+        - Click Sign Up button
+        - Verify successfull registration
+        """
+
+        # Create driver
+        driver = webdriver.Chrome(r"\Users\nicewarthog\PycharmProjects\QAAppG6\chromedriver.exe")
+
+        # Open page
+        driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
+        sleep(1)
+        self.log.info("Open page")
+
+        # Fill login
+        # user = self.random_str() # змінна user прийняла рандомний рядок
+        username_value = f"{self.random_str()}{self.random_num()}"  # змінна username_value з рандомних рядка і числа
+        username = driver.find_element(by=By.XPATH,
+                                       value=".//input[@id='username-register']")  # знаходимо поле
         username.clear()
         username.send_keys(username_value)
-        sleep(0.5)
+        sleep(1)
 
         # Fill email
         email_value = f"{self.random_str()}{self.random_num()}@mail.com"
-        email = chrome_driver.find_element(by=By.XPATH, value=".//input[@id='email-register']")
+        email = driver.find_element(by=By.XPATH, value=".//input[@id='email-register']")
         email.clear()
         email.send_keys(email_value)
-        sleep(0.5)
+        sleep(1)
 
         # Fill password
         password_value = f"{self.random_str(6)}{self.random_num()}"
-        password = chrome_driver.find_element(by=By.XPATH, value=".//input[@id='password-register']")
+        password = driver.find_element(by=By.XPATH, value=".//input[@id='password-register']")
         password.clear()
         password.send_keys(password_value)
         self.log.info("Fields were filled")
-        sleep(0.5)
+        sleep(1)
 
         # Click Sign Up button
-        chrome_driver.find_element(by=By.XPATH, value=".//button[text()='Sign up for OurApp']").click()
-        sleep(0.5)
+        # button = driver.find_element(by=By.XPATH, value=".//button[text()='Sign up for OurApp']")
+        # button.click()
+        driver.find_element(by=By.XPATH, value=".//button[text()='Sign up for OurApp']").click()
+        sleep(1)
 
         # Verify success. Тут можна використати різні варіанти однієї перевірки
         """Для початку знаходимо повідомлення 'Hello {username}, your feed is empty.'"""
-        hello_message = chrome_driver.find_element(by=By.XPATH, value=".//h2")
+        hello_message = driver.find_element(by=By.XPATH, value=".//h2")
         """Перевіряємо, що ім'я нового юзера в ловері знаходиться в тексті повідомлення"""
         assert username_value.lower() in hello_message.text
         """Або перевіряємо повністю строку, ім'я повинно співпадати з зареєстрованим"""
         assert hello_message.text == f"Hello {username_value.lower()}, your feed is empty."
         """Або перевіряємо тільки зареєстроване ім'я"""
-        assert chrome_driver.find_element(by=By.XPATH, value=".//strong").text == username_value.lower()
+        assert driver.find_element(by=By.XPATH, value=".//strong").text == username_value.lower()
         self.log.info("Registration for user '%s' was success and verified", username_value)
 
         # Close driver
-        chrome_driver.close()
+        driver.close()
 
     """-----LOG IN-----"""
     """
     - correct login - nicewarthog
     - correct pass - nicewarthogpass 
     """
+
+
+class TestLogIn:
+    log = logging.getLogger("[Log In]")
 
     def test_empty_login(self, chrome_driver, open_start_page):
         """
@@ -242,17 +306,17 @@ class TestStartPage:
         # Fill login
         login = chrome_driver.find_element(by=By.XPATH, value=".//input[@placeholder='Username']")
         login.clear()
-        sleep(0.5)
+        sleep(1)
 
         # Fill password
         password = chrome_driver.find_element(by=By.XPATH, value=".//input[@placeholder='Password']")
         password.send_keys("nicewarthogpass")
-        sleep(0.5)
+        sleep(1)
 
         # Click button
         button = chrome_driver.find_element(by=By.XPATH, value=".//button[text()='Sign In']")
         button.click()
-        sleep(0.5)
+        sleep(1)
 
         # Verify error
         error_element = chrome_driver.find_element(by=By.XPATH,
@@ -277,17 +341,17 @@ class TestStartPage:
         # Fill login
         login = chrome_driver.find_element(by=By.XPATH, value=".//input[@placeholder='Username']")
         login.send_keys("nicewarthog")
-        sleep(0.5)
+        sleep(1)
 
         # Fill password
         password = chrome_driver.find_element(by=By.XPATH, value=".//input[@placeholder='Password']")
         password.clear()
-        sleep(0.5)
+        sleep(1)
 
         # Click button
         button = chrome_driver.find_element(by=By.XPATH, value=".//button[text()='Sign In']")
         button.click()
-        sleep(0.5)
+        sleep(1)
 
         # Verify error
         error_element = chrome_driver.find_element(by=By.XPATH,
@@ -313,17 +377,17 @@ class TestStartPage:
         # Fill login
         login = chrome_driver.find_element(by=By.XPATH, value=".//input[@placeholder='Username']")
         login.send_keys("incorrectuser")
-        sleep(0.5)
+        sleep(1)
 
         # Fill password
         password = chrome_driver.find_element(by=By.XPATH, value=".//input[@placeholder='Password']")
         password.send_keys("nicewarthogpass")
-        sleep(0.5)
+        sleep(1)
 
         # Click button
         button = chrome_driver.find_element(by=By.XPATH, value=".//button[text()='Sign In']")
         button.click()
-        sleep(0.5)
+        sleep(1)
 
         # Verify error
         error_element = chrome_driver.find_element(by=By.XPATH,
@@ -348,17 +412,17 @@ class TestStartPage:
         # Fill login
         login = chrome_driver.find_element(by=By.XPATH, value=".//input[@placeholder='Username']")
         login.send_keys("nicewarthog")
-        sleep(0.5)
+        sleep(1)
 
         # Fill password
         password = chrome_driver.find_element(by=By.XPATH, value=".//input[@placeholder='Password']")
         password.send_keys("incorrectpass")
-        sleep(0.5)
+        sleep(1)
 
         # Click button
         button = chrome_driver.find_element(by=By.XPATH, value=".//button[text()='Sign In']")
         button.click()
-        sleep(0.5)
+        sleep(1)
 
         # Verify error
         error_element = chrome_driver.find_element(by=By.XPATH,
@@ -383,17 +447,17 @@ class TestStartPage:
         login = chrome_driver.find_element(by=By.XPATH, value=".//input[@placeholder='Username']")
         login_value = "nicewarthog"
         login.send_keys(login_value)
-        sleep(0.5)
+        sleep(1)
 
         # Fill password
         password = chrome_driver.find_element(by=By.XPATH, value=".//input[@placeholder='Password']")
         password.send_keys("nicewarthogpass")
-        sleep(0.5)
+        sleep(1)
 
         # Click button
         button = chrome_driver.find_element(by=By.XPATH, value=".//button[text()='Sign In']")
         button.click()
-        sleep(0.5)
+        sleep(1)
 
         # Verify account name
         account_name = chrome_driver.find_element(by=By.XPATH,
