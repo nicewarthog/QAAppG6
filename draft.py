@@ -5,6 +5,7 @@ from time import sleep
 
 import pyautogui
 import pytest
+import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -35,6 +36,16 @@ class TestRegistration:
     def random_str(length=5):
         """Generate random string"""
         return ''.join(random.choice(string.ascii_letters) for _ in range(length))
+
+    @staticmethod
+    def is_exist(driver, xpath):
+        """Check that element exists"""
+        # driver = webdriver.Chrome(r"\Users\nicewarthog\PycharmProjects\QAAppG6\chromedriver.exe")
+        try:
+            driver.find_element(by=By.XPATH, value=xpath)
+            return True
+        except selenium.common.exceptions.NoSuchElementException:
+            return False
 
     def test_empty_fields_validation(self, chrome_driver, open_start_page):
         """
@@ -161,11 +172,18 @@ class TestRegistration:
             assert s31_login_validation.text == "Username cannot exceed 30 characters."
             self.log.info("В логіні ,більше 30 символів")
         else:
-            # Як перевірити, що валідація не з'являється???
             other_login_validation = driver.find_element(by=By.XPATH,
                                                          value=".//div[contains(text(),'That username is already taken.')]")
             assert other_login_validation.text == "That username is already taken."
-            self.log.info("В логіні не менше 3 та не більше 31 символа")
+            other_login_validation = self.is_exist(driver, xpath=".//div[contains(text(),'That username is already taken.')]")
+            self.log.info(f"Повідомлення That username is already taken - {other_login_validation}")
+            s2_login_validation = self.is_exist(driver,
+                                                xpath=".//div[contains(text(),'Username must be at least 3 characters.')]")
+            assert not s2_login_validation
+            self.log.info(f"Повідомлення Username must be at least 3 characters - {s2_login_validation}")
+            s31_login_validation = self.is_exist(driver, xpath=".//div[contains(text(),'Username cannot exceed 30 characters.')]")
+            assert not s31_login_validation
+            self.log.info(f"Повідомлення Username cannot exceed 30 characters - {s31_login_validation}")
 
         # Close driver
         driver.close()

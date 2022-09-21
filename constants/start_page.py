@@ -1,0 +1,37 @@
+class StartPageConstants:
+    # Registration
+    REG_LOGIN_FIELD_XPATH = ".//input[@id='username-register']"
+    REG_LOGIN_3_SYMB_INPUT = "3sy"
+    REG_LOGIN_30_SYMB_INPUT = "30symbols30symbols30symbols30s"
+    REG_LOGIN_TO_SHORT_INPUT = "2s"
+    REG_LOGIN_TO_SHORT_MESSAGE_XPATH = ".//div[contains(text(),'Username must be at least 3 characters.')]"
+    REG_LOGIN_TO_SHORT_MESSAGE_TEXT = "Username must be at least 3 characters."
+    REG_LOGIN_TO_LONG_INPUT = "31symbols31symbols31symbols31sy"
+    REG_LOGIN_TO_LONG_MESSAGE_XPATH = ".//div[contains(text(),'Username cannot exceed 30 characters.')]"
+    REG_LOGIN_TO_LONG_MESSAGE_TEXT = "Username cannot exceed 30 characters."
+    REG_LOGIN_IS_TAKEN_INPUT = "nicewarthog"
+    REG_LOGIN_IS_TAKEN_MESSAGE_XPATH = ".//div[contains(text(),'That username is already taken.')]"
+    REG_LOGIN_IS_TAKEN_MESSAGE_TEXT = "That username is already taken."
+    REG_EMAIL_FIELD_XPATH = ".//input[@id='email-register']"
+    REG_EMAIL_EMPTY_MESSAGE_XPATH = ".//div[contains(text(),'You must provide a valid email address.')]"
+    REG_EMAIL_EMPTY_MESSAGE_TEXT = "You must provide a valid email address."
+    REG_PASS_FIELD_XPATH = ".//input[@id='password-register']"
+    REG_PASS_TO_SHORT_MESSAGE_XPATH = ".//div[contains(text(),'Password must be at least 12 characters.')]"
+    REG_PASS_TO_SHORT_MESSAGE_TEXT = "Password must be at least 12 characters."
+    REG_BUTTON_XPATH = ".//button[text()='Sign up for OurApp']"
+    REG_BUTTON_TEXT = "Sign up for OurApp"
+
+    # Sign In
+    SIGN_IN_LOGIN_FIELD_XPATH = ".//input[@placeholder='Username']"
+    SIGN_IN_PASS_FIELD_XPATH = ".//input[@placeholder='Password']"
+    SIGN_IN_CORRECT_LOGIN_INPUT = "nicewarthog"
+    SIGN_IN_CORRECT_PASS_INPUT = "nicewarthogpass"
+    SIGN_IN_BUTTON_XPATH = ".//button[text()='Sign In']"
+    SIGN_IN_INVALID_DATA_MESSAGE_XPATH = ".//div[@class='alert alert-danger text-center']"
+    SIGN_IN_INVALID_DATA_MESSAGE_TEXT = "Invalid username / pasword"
+
+    # Account Page
+    HELLO_MESSAGE_XPATH = ".//h2"
+    HELLO_MESSAGE_USERNAME_XPATH = ".//strong"
+    HELLO_MESSAGE_TEXT = "Hello {username}, your feed is empty."
+    ACCOUNT_NAME_XPATH = ".//span[@class='text-white mr-2']"
