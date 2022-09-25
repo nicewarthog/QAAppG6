@@ -1,5 +1,4 @@
 import logging
-from time import sleep
 
 import pytest
 from selenium import webdriver
@@ -19,11 +18,13 @@ class TestStartPage:
         driver = webdriver.Chrome(DRIVER_PATH)
         # open Start Page URL
         driver.get(BASE_URL)
+        driver.implicitly_wait(1)
+        # Steps
         yield StartPage(driver)
         # Close driver
         driver.close()
 
-    """-----REGISTRATION-----"""
+    """-----SIGN UP-----"""
 
     def test_empty_fields_validation(self, open_start_page):
         """
@@ -36,7 +37,7 @@ class TestStartPage:
         """
 
         # Sign Up as a user
-        open_start_page.sign_up("", "", "")
+        open_start_page.sign_up_and_fail("", "", "")
         self.log.info("Sign Up with empty login, email, password")
 
         # Verify wrong registration dat errors
@@ -63,13 +64,12 @@ class TestStartPage:
         password_value = f"{random_str(6)}{random_num()}"
 
         # Sign Up as a user
-        open_start_page.sign_up("nicewarthog", email_value, password_value)
+        open_start_page.sign_up_and_fail("nicewarthog", email_value, password_value)
         self.log.info("Sign Up with login, that was taken")
 
         # Verify login is taken error
         open_start_page.verify_sign_up_taken_login_error()
         self.log.info("Login has already taken")
-        sleep(0.5)
 
         # Verify a user is on the start page
         open_start_page.verify_sign_up_button()
@@ -92,7 +92,7 @@ class TestStartPage:
         - Verify error for 3, 30 symbols - That username is already taken.
         """
 
-        open_start_page.sign_up(login, email="", password="")
+        open_start_page.sign_up_and_fail(login, email="", password="")
         self.log.info("Sign Up with login, that was taken")
 
         if len(login) < 3:
@@ -107,7 +107,6 @@ class TestStartPage:
             # Verify login is taken error
             open_start_page.verify_sign_up_taken_login_error()
             self.log.info("Login has from 3 to 30 symbols and has already taken")
-            sleep(0.5)
 
     def test_success_registration(self, open_start_page):
         """
@@ -125,125 +124,11 @@ class TestStartPage:
         password_value = f"{random_str(6)}{random_num()}"
 
         # Sign Up as a user
-        open_start_page.sign_up(username_value, email_value, password_value)
+        hello_page = open_start_page.sign_up_and_verify(username_value, email_value, password_value)
         self.log.info("Signed Up as user %s", username_value)  # замість %s додається username_value
 
         # Verify success
-        open_start_page.verify_success_sign_up(username_value)
+        hello_page.verify_success_sign_up(username_value)
         self.log.info("Hello message was verified, Sign Up was successfully")
-
-    """-----LOG IN-----"""
-    """
-    - correct login - nicewarthog
-    - correct pass - nicewarthogpass 
-    """
-
-    def test_empty_login(self, open_start_page):
-        """
-        Fixture:
-        - Create driver, open page
-        Steps:
-        - Clear login, fill correct password
-        - Click Sign In button
-        - Verify error
-        """
-
-        # Sign In with empty login
-        open_start_page.sing_in("", "nicewarthogpass")
-        self.log.info("Logged in as non-existing user")
-
-        # Verify error
-        open_start_page.verify_sign_in_error()
-        self.log.info("Error was verified")
-
-    def test_empty_password(self, open_start_page):
-        """
-        Fixture:
-        - Create driver, open page
-        Steps:
-        - Fill correct login, clear password
-        - Click Sign In button
-        - Verify error
-        """
-
-        # Sign In with empty login
-        open_start_page.sing_in("nicewarthog", "")
-        self.log.info("Logged in as non-existing user")
-
-        # Verify error
-        open_start_page.verify_sign_in_error()
-        self.log.info("Error was verified")
-
-    def test_incorrect_login(self, open_start_page):
-        """
-        Fixture:
-        - Create driver, open page
-        Steps:
-        - Fill incorrect login, correct password
-        - Click Sign in button
-        - Verify error
-        """
-
-        # Login as a user
-        open_start_page.sing_in("incorrectuser", "nicewarthogpass")
-        self.log.info("Logged in as non-existing user")
-
-        # Verify error
-        open_start_page.verify_sign_in_error()
-        self.log.info("Error was verified")
-
-    def test_incorrect_password(self, open_start_page):
-        """
-        Fixture:
-        - Create driver, open page
-        Steps:
-        - Fill correct login, incorrect password
-        - Click Sign in button
-        - Verify error
-        """
-
-        # Login as a user
-        open_start_page.sing_in("nicewarthog", "incorrectpass")
-        self.log.info("Logged in as non-existing user")
-
-        # Verify error
-        open_start_page.verify_sign_in_error()
-        self.log.info("Error was verified")
-
-    def test_correct_log_in(self, open_start_page):
-        """
-        Fixture:
-        - Create driver, open page
-        Steps:
-        - Fill correct login, fill correct password
-        - Click Sign In button
-        - Verify successfull log in account
-        """
-
-        # Login as a user
-        open_start_page.sing_in("nicewarthog", "nicewarthogpass")
-        self.log.info("Logged in with correct login and password")
-
-        # Verify success
-        open_start_page.verify_sign_in_success()
-        self.log.info("Account name was verified, Log In was successfully")
-
-    def test_log_in_with_enter_key(self, open_start_page):
-        """
-        Fixture:
-        - Create driver, open page
-        Steps:
-        - Fill correct login, fill correct password
-        - Press Enter on keyboard
-        - Verify successfull log in account
-        """
-
-        # Login as a user with Enter key
-        open_start_page.sing_in_with_enter("nicewarthog", "nicewarthogpass")
-        self.log.info("Logged in with correct login and password")
-
-        # Verify success
-        open_start_page.verify_sign_in_success()
-        self.log.info("Account name was verified, Log In was successfully")
 
 # pytest test_start_page.py
