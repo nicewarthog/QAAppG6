@@ -23,11 +23,7 @@ class TestHeader:
         # Close driver
         driver.close()
 
-    """-----SIGN IN/OUT-----"""
-    """
-    - correct login - nicewarthog
-    - correct pass - nicewarthogpass 
-    """
+    # SIGN IN/OUT
 
     @pytest.fixture(scope="function")
     def log_in_as_user(self, open_start_page):
@@ -154,7 +150,7 @@ class TestHeader:
         open_start_page.header.verify_sign_out_success()
         self.log.info("Sign In button was verified, Log In was successfully")
 
-        """MY PROFILE"""
+    # MY PROFILE
 
     def test_open_profile_page(self, open_start_page, log_in_as_user):
         """
@@ -166,7 +162,6 @@ class TestHeader:
            """
 
         # Click Profile button
-
         profile_page = open_start_page.header.open_my_profile_page()
 
         # Verify success

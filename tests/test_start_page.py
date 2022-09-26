@@ -24,7 +24,7 @@ class TestStartPage:
         # Close driver
         driver.close()
 
-    """-----SIGN UP-----"""
+    # SIGN UP
 
     def test_empty_fields_validation(self, open_start_page):
         """
