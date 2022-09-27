@@ -20,18 +20,3 @@ class StartPageConstants:
     REG_PASS_TO_SHORT_MESSAGE_TEXT = "Password must be at least 12 characters."
     REG_BUTTON_XPATH = ".//button[text()='Sign up for OurApp']"
     REG_BUTTON_TEXT = "Sign up for OurApp"
-
-    # Sign In
-    SIGN_IN_LOGIN_FIELD_XPATH = ".//input[@placeholder='Username']"
-    SIGN_IN_PASS_FIELD_XPATH = ".//input[@placeholder='Password']"
-    SIGN_IN_CORRECT_LOGIN_INPUT = "nicewarthog"
-    SIGN_IN_CORRECT_PASS_INPUT = "nicewarthogpass"
-    SIGN_IN_BUTTON_XPATH = ".//button[text()='Sign In']"
-    SIGN_IN_INVALID_DATA_MESSAGE_XPATH = ".//div[@class='alert alert-danger text-center']"
-    SIGN_IN_INVALID_DATA_MESSAGE_TEXT = "Invalid username / pasword"
-
-    # Account Page
-    HELLO_MESSAGE_XPATH = ".//h2"
-    HELLO_MESSAGE_USERNAME_XPATH = ".//strong"
-    HELLO_MESSAGE_TEXT = "Hello {username}, your feed is empty."
-    ACCOUNT_NAME_XPATH = ".//span[@class='text-white mr-2']"
