@@ -1,8 +1,6 @@
 from time import sleep
 
-from constants.start_page import StartPageConstants
 from pages.base_page import BasePage
-from pages.header import Header
 from pages.utils import wait_until_ok
 
 
@@ -10,9 +8,14 @@ class StartPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
+        from constants.start_page import StartPageConstants
         self.constants = StartPageConstants()
-        self.header = Header(self.driver)
+        from pages.header_before_sign_in import HeaderBeforeSignIn
+        self.header_before_sign_in = HeaderBeforeSignIn(self.driver)
+        from pages.header_after_sign_in import HeaderAfterSignIn
+        self.header_after_sign_in = HeaderAfterSignIn(self.driver)
 
+    # SIGN UP
     def sign_up_and_fail(self, login, email, password):
         """Sign up as the user. Only for incorrect Sign Up"""
         # Fill login
@@ -88,3 +91,4 @@ class StartPage(BasePage):
         assert self.get_element_text(
             self.constants.REG_BUTTON_XPATH) == self.constants.REG_BUTTON_TEXT, \
             f"Actual message: {self.get_element_text(self.constants.REG_BUTTON_XPATH)}"
+

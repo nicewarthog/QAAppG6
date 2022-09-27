@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
 
+
 class BasePage:
 
     def __init__(self, driver):
@@ -52,3 +53,12 @@ class BasePage:
         # Verify error
         element = self.wait_until_displayed(xpath=xpath)
         return element.text
+
+    # PAGES/HEADERS
+    def hello_page_return(self):
+        from pages.hello_page import HelloPage
+        return HelloPage(self.driver)
+
+    def header_before_sign_in_return(self):
+        from pages.header_before_sign_in import HeaderBeforeSignIn
+        return HeaderBeforeSignIn(self.driver)

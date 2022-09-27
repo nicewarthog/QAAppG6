@@ -1,14 +1,15 @@
-from constants.profile_page import ProfilePageConsts
+
 from pages.base_page import BasePage
-from pages.header import Header
 
 
 class ProfilePage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
+        from constants.profile_page import ProfilePageConsts
         self.constants = ProfilePageConsts
-        self.header = Header(self.driver)
+        from pages.header_before_sign_in import HeaderBeforeSignIn
+        self.header = HeaderBeforeSignIn(self.driver)
 
     def verify_open_profile_page(self, login):
         """Verify success open the Profile Page"""

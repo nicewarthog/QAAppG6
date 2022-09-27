@@ -33,13 +33,13 @@ class TestCreatePostPage:
         # return open_start_page.sign_up_and_verify(username_value, email_value, password_value)
         username_value = "nicewarthog"
         password_value = "nicewarthogpass"
-        open_start_page.header.sign_in_and_verify(username_value, password_value)
+        open_start_page.header_before_sign_in.sign_in_and_verify(username_value, password_value)
         self.log.info("Logged in with correct login and password")
-        return open_start_page.header.hello_page_return()
+        return open_start_page.hello_page_return()
 
     @pytest.fixture(scope="function")
     def open_create_post_page(self, open_hello_page):
-        create_post_page = open_hello_page.header.navigate_to_create_post()
+        create_post_page = open_hello_page.header_after_sign_in.navigate_to_create_post()
         self.log.info("Move to Create Post Page")
         return create_post_page
 
@@ -48,15 +48,18 @@ class TestCreatePostPage:
         new_post = open_create_post_page.create_post(title=random_str(15), body=random_str(50))
         return new_post
 
-    def test_create_new_post(self, create_new_post, open_create_post_page):
+    def test_create_new_post(self, open_create_post_page):
         """
         Pre-conditions:
         - Sign Up/Sign In as the user
         - Navigate to Create Post Page
-        - Create new post
         Steps:
+        - Create new post
         - Verify the result
         """
+
+        # Create new post
+        open_create_post_page.create_post(title=random_str(15), body=random_str(50))
 
         # Verify the result
         open_create_post_page.verify_successfully_create_post()

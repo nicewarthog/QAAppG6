@@ -1,14 +1,16 @@
-from constants.hello_page import HelloPageConst
 from pages.base_page import BasePage
-from pages.header import Header
 
 
 class HelloPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
+        from constants.hello_page import HelloPageConst
         self.constants = HelloPageConst()
-        self.header = Header(self.driver)
+        from pages.header_before_sign_in import HeaderBeforeSignIn
+        self.header_before_sign_in = HeaderBeforeSignIn(self.driver)
+        from pages.header_after_sign_in import HeaderAfterSignIn
+        self.header_after_sign_in = HeaderAfterSignIn(self.driver)
 
     def verify_success_sign_up(self, login):
         """Verify success Sign Up using Hello message"""
