@@ -5,6 +5,7 @@ from selenium import webdriver
 
 from constants.base import DRIVER_PATH, BASE_URL
 from pages.start_page import StartPage
+from pages.utils import User
 
 
 class TestHeaderAfterSignIn:
@@ -24,13 +25,15 @@ class TestHeaderAfterSignIn:
         driver.close()
 
     @pytest.fixture(scope="function")
-    def log_in_as_user(self, open_start_page):
-        self.log.info("Logged in with correct login and password")
-        return open_start_page.header_before_sign_in.sign_in_and_verify("nicewarthog", "nicewarthogpass")
+    def primary_user(self, open_start_page):
+        correct_user = User()
+        correct_user.sign_in_correct_user_data()
+        open_start_page.header_before_sign_in.sign_in_and_verify(correct_user)
+        return correct_user
 
     # SIGN OUT
 
-    def test_sign_out(self, open_start_page, log_in_as_user):
+    def test_sign_out(self, open_start_page, primary_user):
         """
         Fixture:
         - Log In as user
@@ -49,7 +52,7 @@ class TestHeaderAfterSignIn:
 
     # MY PROFILE
 
-    def test_open_profile_page(self, open_start_page, log_in_as_user):
+    def test_open_profile_page(self, open_start_page, primary_user):
         """
            Fixture:
            - Log In as user

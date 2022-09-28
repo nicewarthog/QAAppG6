@@ -16,8 +16,8 @@ class StartPage(BasePage):
         self.header_after_sign_in = HeaderAfterSignIn(self.driver)
 
     # SIGN UP
-    def sign_up_and_fail(self, login, email, password):
-        """Sign up as the user. Only for incorrect Sign Up"""
+    def sign_up_parametrize(self, login, email, password):
+        """Sign up as the user. For parametrize tests"""
         # Fill login
         self.fill_field(xpath=self.constants.REG_LOGIN_FIELD_XPATH, value=login)
         # Fill email
@@ -28,7 +28,19 @@ class StartPage(BasePage):
         sleep(1)
         self.click(xpath=self.constants.REG_BUTTON_XPATH)
 
-    def sign_up_and_verify(self, login, email, password):
+    def sign_up_and_fail(self, user):
+        """Sign up as the user. Only for incorrect Sign Up"""
+        # Fill login
+        self.fill_field(xpath=self.constants.REG_LOGIN_FIELD_XPATH, value=user.login)
+        # Fill email
+        self.fill_field(xpath=self.constants.REG_EMAIL_FIELD_XPATH, value=user.email)
+        # Fill password
+        self.fill_field(xpath=self.constants.REG_PASS_FIELD_XPATH, value=user.password)
+        # Click button
+        sleep(1)
+        self.click(xpath=self.constants.REG_BUTTON_XPATH)
+
+    def sign_up_and_verify(self, user):
         """Sign up as the user and verify that you are inside"""
         """
         Це попередній метод, але без сліпа. Разом з методом click_sign_up_and_verify нижче він:
@@ -38,11 +50,11 @@ class StartPage(BasePage):
         - як тільки кнопка пропаде і assert виконається, тест піде далі
         """
         # Fill login
-        self.fill_field(xpath=self.constants.REG_LOGIN_FIELD_XPATH, value=login)
+        self.fill_field(xpath=self.constants.REG_LOGIN_FIELD_XPATH, value=user.login)
         # Fill email
-        self.fill_field(xpath=self.constants.REG_EMAIL_FIELD_XPATH, value=email)
+        self.fill_field(xpath=self.constants.REG_EMAIL_FIELD_XPATH, value=user.email)
         # Fill password
-        self.fill_field(xpath=self.constants.REG_PASS_FIELD_XPATH, value=password)
+        self.fill_field(xpath=self.constants.REG_PASS_FIELD_XPATH, value=user.password)
         # Click button
         self.click_sign_up_and_verify()  # використали метод нижче, в ньому вже є потрібні @wait_until_ok та assert
         # Return Hello Page
@@ -91,4 +103,3 @@ class StartPage(BasePage):
         assert self.get_element_text(
             self.constants.REG_BUTTON_XPATH) == self.constants.REG_BUTTON_TEXT, \
             f"Actual message: {self.get_element_text(self.constants.REG_BUTTON_XPATH)}"
-

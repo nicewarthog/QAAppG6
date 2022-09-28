@@ -11,8 +11,4 @@ class HeaderBeforeSignInConsts:
     SIGN_OUT_BUTTON_XPATH = ".//button[contains(text(),'Sign Out')]"
 
     # # Create Post
-    # CREATE_POST_BUTTON_XPATH = ".//a[@href='/create-post']"
     ACCOUNT_NAME_XPATH = ".//span[@class='text-white mr-2']"
-    #
-    # # Profile
-    # MY_PROFILE_BUTTON = ".//img[@alt='My profile']"
