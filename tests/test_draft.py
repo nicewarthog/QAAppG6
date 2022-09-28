@@ -21,7 +21,7 @@ def open_start_page(chrome_driver):
     # Open start page
     return chrome_driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
 
-    """-----REGISTRATION-----"""
+# REGISTRATION
 
 
 class TestRegistration:

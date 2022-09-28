@@ -62,5 +62,9 @@ class HeaderBeforeSignIn(BasePage):
         assert not self.is_exist(self.constants.ACCOUNT_NAME_XPATH)
         assert self.get_element_text(self.constants.SIGN_IN_BUTTON_XPATH) == self.constants.SIGN_IN_BUTTON_TEXT
 
-    # def header_before_sign_in_return(self):
-    #     return HeaderBeforeSignIn(self.driver)
+    def post_with_enter(self, user):
+        """Sign in as the user"""
+        # Fill post
+        self.fill_post(xpath=self.constants.SIGN_IN_LOGIN_FIELD_XPATH, value=user.login)
+        # Click button
+        self.press_enter()
