@@ -5,7 +5,7 @@ from selenium import webdriver
 
 from constants.base import DRIVER_PATH, BASE_URL
 from pages.start_page import StartPage
-from pages.utils import random_str, random_num
+from pages.utils import User
 
 
 class TestStartPage:
@@ -24,9 +24,15 @@ class TestStartPage:
         # Close driver
         driver.close()
 
+    @pytest.fixture(scope="function")
+    def random_user(self):
+        user = User()
+        user.sign_up_random_user_data()
+        return user
+
     # SIGN UP
 
-    def test_empty_fields_validation(self, open_start_page):
+    def test_empty_fields_validation(self, open_start_page, random_user):
         """
         Fixture:
         - Create driver, open page
@@ -37,7 +43,7 @@ class TestStartPage:
         """
 
         # Sign Up as a user
-        open_start_page.sign_up_and_fail("", "", "")
+        open_start_page.sign_up_and_fail(User())
         self.log.info("Sign Up with empty login, email, password")
 
         # Verify wrong registration dat errors
@@ -48,7 +54,7 @@ class TestStartPage:
         open_start_page.verify_sign_up_empty_password_error()
         self.log.info("Password was empty")
 
-    def test_login_is_taken(self, open_start_page):
+    def test_login_is_taken(self, open_start_page, random_user):
         """
         Fixture:
         - Create driver, open page
@@ -59,12 +65,8 @@ class TestStartPage:
         - Verify error, Verify start page
         """
 
-        # Prepare data
-        email_value = f"{random_str()}{random_num()}@mail.com"
-        password_value = f"{random_str(6)}{random_num()}"
-
         # Sign Up as a user
-        open_start_page.sign_up_and_fail("nicewarthog", email_value, password_value)
+        open_start_page.sign_up_and_fail(User("nicewarthog", random_user.email, random_user.password))
         self.log.info("Sign Up with login, that was taken")
 
         # Verify login is taken error
@@ -92,7 +94,7 @@ class TestStartPage:
         - Verify error for 3, 30 symbols - That username is already taken.
         """
 
-        open_start_page.sign_up_and_fail(login, email="", password="")
+        open_start_page.sign_up_parametrize(login, email="", password="")
         self.log.info("Sign Up with login, that was taken")
 
         if len(login) < 3:
@@ -108,7 +110,7 @@ class TestStartPage:
             open_start_page.verify_sign_up_taken_login_error()
             self.log.info("Login has from 3 to 30 symbols and has already taken")
 
-    def test_success_registration(self, open_start_page):
+    def test_success_registration(self, open_start_page, random_user):
         """
         Fixture:
         - Create driver, open page
@@ -118,17 +120,12 @@ class TestStartPage:
         - Verify success registration
         """
 
-        # Prepare data
-        username_value = f"{random_str()}{random_num()}"
-        email_value = f"{random_str()}{random_num()}@mail.com"
-        password_value = f"{random_str(6)}{random_num()}"
-
         # Sign Up as a user
-        hello_page = open_start_page.sign_up_and_verify(username_value, email_value, password_value)
-        self.log.info("Signed Up as user %s", username_value)  # замість %s додається username_value
+        hello_page = open_start_page.sign_up_and_verify(random_user)
+        self.log.info("Signed Up as user %s", random_user.login)  # замість %s додається username_value
 
         # Verify success
-        hello_page.verify_success_sign_up(username_value)
+        hello_page.verify_success_sign_up(random_user.login)
         self.log.info("Hello message was verified, Sign Up was successfully")
 
 # pytest test_start_page.py

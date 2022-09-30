@@ -5,6 +5,7 @@ from selenium import webdriver
 
 from constants.base import DRIVER_PATH, BASE_URL
 from pages.start_page import StartPage
+from pages.utils import User
 
 
 class TestHeaderBeforeSignIn:
@@ -25,10 +26,10 @@ class TestHeaderBeforeSignIn:
 
     # SIGN IN
 
-    @pytest.fixture(scope="function")
-    def log_in_as_user(self, open_start_page):
-        self.log.info("Logged in with correct login and password")
-        return open_start_page.header_before_sign_in.sign_in_and_verify("nicewarthog", "nicewarthogpass")
+    # @pytest.fixture(scope="function")
+    # def log_in_as_user(self, open_start_page):
+    #     self.log.info("Logged in with correct login and password")
+    #     return open_start_page.header_before_sign_in.sign_in_and_verify("nicewarthog", "nicewarthogpass")
 
     def test_empty_login(self, open_start_page):
         """
@@ -113,7 +114,9 @@ class TestHeaderBeforeSignIn:
         """
 
         # Log in as user
-        open_start_page.header_before_sign_in.sign_in_and_verify("nicewarthog", "nicewarthogpass")
+        correct_user = User()  # логін і пароль коректного юзера задані в pages.utils - User().sign_in_correct_user_data
+        correct_user.sign_in_correct_user_data()
+        open_start_page.header_before_sign_in.sign_in_and_verify(correct_user)
 
         # Verify success
         open_start_page.header_after_sign_in.verify_sign_in_success()
@@ -129,9 +132,10 @@ class TestHeaderBeforeSignIn:
         - Verify successfull log in account
         """
 
-        # Login as a user with Enter key
-        open_start_page.header_before_sign_in.sign_in_with_enter("nicewarthog", "nicewarthogpass")
-        self.log.info("Logged in with correct login and password")
+        # Log in as user
+        correct_user = User()
+        correct_user.sign_in_correct_user_data()
+        open_start_page.header_before_sign_in.sign_in_with_enter(correct_user)
 
         # Verify success
         open_start_page.header_after_sign_in.verify_sign_in_success()
