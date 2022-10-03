@@ -19,8 +19,7 @@ class CreatePostPage(BasePage):
 
     # def verify_checkbox(self):
     #     """Click 'Is this post unique?' checkbox"""
-    #     selected_checkbox = self.click(xpath=self.constants.POST_CHECKBOX_XPATH)
-    #     assert selected_checkbox.is_selected()
+    #     assert self.get_selected_checkbox(xpath=self.constants.POST_CHECKBOX_XPATH).is_selected()
 
     # def select(self, select):
     #     """Open select and choose a value"""

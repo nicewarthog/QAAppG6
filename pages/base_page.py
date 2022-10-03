@@ -54,6 +54,11 @@ class BasePage:
         """Find and click button"""
         self.wait_until_clickable(xpath=xpath).click()
 
+    # def get_selected_checkbox(self, xpath):
+    #     """Find and click button"""
+    #     selected_checkbox = self.wait_until_clickable(xpath=xpath).click()
+    #     return selected_checkbox
+
     def get_element_text(self, xpath):
         """Find element and get text"""
         element = self.wait_until_displayed(xpath=xpath)

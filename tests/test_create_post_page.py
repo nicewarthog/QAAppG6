@@ -63,22 +63,19 @@ class TestCreatePostPage:
         open_create_post_page.verify_not_unique_post()
         self.log.info("Message that post is not unique is appeared")
 
-    # def test_checkbox_is_selected(self, open_create_post_page):
-    #     """
-    #     Pre-conditions:
-    #     - Sign Up/Sign In as the user
-    #     - Navigate to Create Post Page
-    #     Steps:
-    #     - Activate the checkbox
-    #     - Verify the checkbox is selected
-    #     """
-    #
-    #     open_create_post_page.click_checkbox()
-    #     sleep(3)
-    #
-    #     # Verify the checkbox is selected
-    #     open_create_post_page.verify_checkbox()
-    #     self.log.info("Checkbox is activated")
+    def test_checkbox_is_selected(self, open_create_post_page):
+        """
+        Pre-conditions:
+        - Sign Up/Sign In as the user
+        - Navigate to Create Post Page
+        Steps:
+        - Activate the checkbox
+        - Verify the checkbox is selected
+        """
+
+        # Verify the checkbox is selected
+        open_create_post_page.verify_checkbox()
+        self.log.info("Checkbox is activated")
 
     def test_create_unique_post(self, open_create_post_page):
         """
