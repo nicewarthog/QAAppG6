@@ -17,8 +17,18 @@ class CreatePostPage(BasePage):
         """Click 'Is this post unique?' checkbox"""
         self.click(xpath=self.constants.POST_CHECKBOX_XPATH)
 
+    # def verify_checkbox(self):
+    #     """Click 'Is this post unique?' checkbox"""
+    #     selected_checkbox = self.click(xpath=self.constants.POST_CHECKBOX_XPATH)
+    #     assert selected_checkbox.is_selected()
+
+    # def select(self, select):
+    #     """Open select and choose a value"""
+    #     self.select_field(xpath=self.constants.POST_SELECT_XPATH, value=select.select_value)
+
     def create_post(self, post):
         """Create post using provided values"""
+        self.select_field(xpath=self.constants.POST_SELECT_XPATH, value=post.select)
         self.fill_field(xpath=self.constants.TITLE_FIELD_XPATH, value=post.title)
         self.fill_field(xpath=self.constants.BODY_FIELD_XPATH, value=post.body)
         self.click(xpath=self.constants.CREATE_POST_BUTTON_XPATH)
@@ -27,6 +37,8 @@ class CreatePostPage(BasePage):
         """Verify the post is successfully created message"""
         assert self.get_element_text(xpath=self.constants.SUCCESS_MESSAGE_XPATH) == self.constants.SUCCESS_MESSAGE_TEXT, \
             f"Actual message: {self.get_element_text(xpath=self.constants.SUCCESS_MESSAGE_XPATH)}"
+
+    # VERIFY CHECKBOX VALUES
 
     def verify_unique_post(self):
         """Verify the post is unique message"""
@@ -37,6 +49,23 @@ class CreatePostPage(BasePage):
         """Verify the post is not unique message"""
         assert self.get_element_text(xpath=self.constants.UNIQUE_MESSAGE_NO_XPATH) == self.constants.UNIQUE_MESSAGE_NO_TEXT, \
             f"Actual message: {self.get_element_text(xpath=self.constants.UNIQUE_MESSAGE_NO_XPATH)}"
+
+    # VERIFY SELECT VALUES
+
+    def verify_public_post(self):
+        """Verify the post is private message"""
+        assert self.get_element_text(xpath=self.constants.PUBLIC_MESSAGE_XPATH) == self.constants.PUBLIC_MESSAGE_TEXT, \
+            f"Actual message: {self.get_element_text(xpath=self.constants.PUBLIC_MESSAGE_XPATH)}"
+
+    def verify_private_post(self):
+        """Verify the post is private message"""
+        assert self.get_element_text(xpath=self.constants.PRIVATE_MESSAGE_XPATH) == self.constants.PRIVATE_MESSAGE_TEXT, \
+            f"Actual message: {self.get_element_text(xpath=self.constants.PRIVATE_MESSAGE_XPATH)}"
+
+    def verify_group_post(self):
+        """Verify the post is private message"""
+        assert self.get_element_text(xpath=self.constants.GROUP_MESSAGE_XPATH) == self.constants.GROUP_MESSAGE_TEXT, \
+            f"Actual message: {self.get_element_text(xpath=self.constants.GROUP_MESSAGE_XPATH)}"
 
     def verify_post_data_is_saved(self):
         """Verify the post title and body data are saved"""

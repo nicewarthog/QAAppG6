@@ -10,6 +10,8 @@ class HeaderAfterSignIn(BasePage):
         super().__init__(driver)
         from constants.header_after_sign_in import HeaderAfterSignInConsts
         self.constants = HeaderAfterSignInConsts
+        from constants.header_before_sign_in import HeaderBeforeSignInConsts
+        self.constants_2 = HeaderBeforeSignInConsts
         from pages.header_before_sign_in import HeaderBeforeSignIn
         self.header_before_sign_in = HeaderBeforeSignIn(self.driver)
         # from pages.start_page import StartPage
@@ -30,6 +32,13 @@ class HeaderAfterSignIn(BasePage):
             self.constants.ACCOUNT_NAME_XPATH) == self.constants.SIGN_IN_CORRECT_LOGIN_INPUT, \
             f"Actual message: {self.get_element_text(self.constants.ACCOUNT_NAME_XPATH)}"
 
+    # def verify_sign_in_success(self):
+    #     """Verify correct Sign In"""
+    #     # login_text = self.get_element_text(self.constants_2.SIGN_IN_LOGIN_FIELD_XPATH)
+    #     username_text = self.get_element_text(self.constants.ACCOUNT_NAME_XPATH)
+    #     from pages.utils import User
+    #     assert username_text == self.header_before_sign_in.sign_in_and_verify(user=User())
+
     # CREATE POST
 
     def navigate_to_create_post(self):
@@ -46,3 +55,10 @@ class HeaderAfterSignIn(BasePage):
         self.click(xpath=self.constants.MY_PROFILE_BUTTON)
         from pages.profile_page import ProfilePage
         return ProfilePage(self.driver)
+
+    def open_chat(self):
+        """Go to chat"""
+        # Click Chat button
+        self.click(xpath=self.constants.OPEN_CHAT_XPATH)
+        from pages.chat import Chat
+        return Chat(self.driver)

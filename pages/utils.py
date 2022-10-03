@@ -37,6 +37,18 @@ def wait_until_ok(timeout=5, period=0.5):
     return decorator
 
 
+# def log_decorator(original_function):
+#     """Logging actions using docstrings"""
+#     log = logging.getLogger("[LogDecorator]")
+#
+#     def wrapper(*args, **kwargs):
+#         result = original_function(*args, **kwargs)
+#         log.info(original_function.__doc__)
+#         return result
+#
+#     return wrapper
+
+
 # USERS
 class User:
 
@@ -60,11 +72,13 @@ class User:
 
 
 class Post:
-    def __init__(self, title="", body=""):
+    def __init__(self, title="", body="", select="Загальнодоступне"):
         self.title = title
         self.body = body
+        self.select = select
 
-    def post_random_data(self, title="", body=""):
+    def post_random_data(self, title="", body="", select="Загальнодоступне"):
         """Fill fields using random data"""
-        self.title = f"{random_str(15)}" if not title else title
-        self.body = f"{random_str(50)}" if not body else body
+        self.title = f"{random_str(15)}"
+        self.body = f"{random_str(50)}"
+        self.select = "Загальнодоступне"

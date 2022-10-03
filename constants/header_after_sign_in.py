@@ -11,3 +11,6 @@ class HeaderAfterSignInConsts:
 
     # Profile
     MY_PROFILE_BUTTON = ".//img[@alt='My profile']"
+
+    # CHAT
+    OPEN_CHAT_XPATH = ".//*[@data-icon='comment']"
