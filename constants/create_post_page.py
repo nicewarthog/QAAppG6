@@ -16,6 +16,15 @@ class CreatePostPageConsts:
     UNIQUE_MESSAGE_YES_XPATH = f".//p[contains(text(),'{UNIQUE_MESSAGE_YES_TEXT}')]"
     UNIQUE_MESSAGE_NO_TEXT = "Is this post unique? : no"
     UNIQUE_MESSAGE_NO_XPATH = f".//p[contains(text(),'{UNIQUE_MESSAGE_NO_TEXT}')]"
+    PUBLIC_MESSAGE_TEXT = "All Users"
+    PUBLIC_MESSAGE_XPATH = f".//u[contains(text(),'{PUBLIC_MESSAGE_TEXT}')]"
+    PRIVATE_MESSAGE_TEXT = "One Person"
+    PRIVATE_MESSAGE_XPATH = f".//u[contains(text(),'{PRIVATE_MESSAGE_TEXT}')]"
+    GROUP_MESSAGE_TEXT = "Group Message"
+    GROUP_MESSAGE_XPATH = f".//u[contains(text(),'{GROUP_MESSAGE_TEXT}')]"
+
+    # Select
+    POST_SELECT_XPATH = ".//select[@id='select1']"
 
     # Update Post
     UPDATE_POST_BUTTON_XPATH = ".//button[contains(text(),'Save Updates')]"

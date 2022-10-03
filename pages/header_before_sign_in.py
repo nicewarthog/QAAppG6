@@ -1,5 +1,7 @@
 import logging
 
+from selenium.webdriver import Keys
+
 from pages.base_page import BasePage
 from pages.utils import wait_until_ok
 
@@ -14,19 +16,11 @@ class HeaderBeforeSignIn(BasePage):
         # from pages.header_after_sign_in import HeaderAfterSignIn
         # self.header_after_sign_in = HeaderAfterSignIn(self.driver)
 
-    def sign_in_and_fail(self, login, password):
-        """Sign in as the user"""
-        # Fill login
-        self.fill_field(xpath=self.constants.SIGN_IN_LOGIN_FIELD_XPATH, value=login)
-        # Fill password
-        self.fill_field(xpath=self.constants.SIGN_IN_PASS_FIELD_XPATH, value=password)
-        # Click button
-        self.click(xpath=self.constants.SIGN_IN_BUTTON_XPATH)
-
     def sign_in_and_verify(self, user):
         """Sign in as the user and verify that you are inside"""
         # Fill login
         self.fill_field(xpath=self.constants.SIGN_IN_LOGIN_FIELD_XPATH, value=user.login)
+        # login_text = self.get_element_text(xpath=self.constants.SIGN_IN_LOGIN_FIELD_XPATH)
         # Fill password
         self.fill_field(xpath=self.constants.SIGN_IN_PASS_FIELD_XPATH, value=user.password)
         # Click button
@@ -46,25 +40,25 @@ class HeaderBeforeSignIn(BasePage):
         """Sign in as the user"""
         # Fill login
         self.fill_field(xpath=self.constants.SIGN_IN_LOGIN_FIELD_XPATH, value=user.login)
+        # Fill password and press Enter
+        self.fill_field(xpath=self.constants.SIGN_IN_PASS_FIELD_XPATH, value=user.password + Keys.ENTER)
+
+    def sign_in_and_fail(self, user):
+        """Sign in as the user"""
+        # Fill login
+        self.fill_field(xpath=self.constants.SIGN_IN_LOGIN_FIELD_XPATH, value=user.login)
         # Fill password
         self.fill_field(xpath=self.constants.SIGN_IN_PASS_FIELD_XPATH, value=user.password)
         # Click button
-        self.press_enter()
+        self.click(xpath=self.constants.SIGN_IN_BUTTON_XPATH)
 
     def verify_sign_in_error(self):
         """Verify invalid Sign In error"""
         assert self.get_element_text(
-            self.constants.SIGN_IN_INVALID_DATA_MESSAGE_XPATH) == self.constants.SIGN_IN_INVALID_DATA_MESSAGE_TEXT, \
-            f"Actual message: {self.get_element_text(self.constants.SIGN_IN_INVALID_DATA_MESSAGE_XPATH)}"
+            self.constants.SIGN_IN_INVALID_DATA_MESSAGE_XPATH) == self.constants.SIGN_IN_INVALID_DATA_MESSAGE_TEXT
+        self.log.info("Invalid Sign In message appears")
 
     def verify_sign_out_success(self):
         """Verify correct Sign Out"""
         assert not self.is_exist(self.constants.ACCOUNT_NAME_XPATH)
         assert self.get_element_text(self.constants.SIGN_IN_BUTTON_XPATH) == self.constants.SIGN_IN_BUTTON_TEXT
-
-    def post_with_enter(self, user):
-        """Sign in as the user"""
-        # Fill post
-        self.fill_post(xpath=self.constants.SIGN_IN_LOGIN_FIELD_XPATH, value=user.login)
-        # Click button
-        self.press_enter()

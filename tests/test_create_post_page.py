@@ -2,28 +2,12 @@ import logging
 from time import sleep
 
 import pytest
-from selenium import webdriver
 
-from constants.base import DRIVER_PATH, BASE_URL
-from pages.start_page import StartPage
 from pages.utils import User, Post
 
 
 class TestCreatePostPage:
     log = logging.getLogger("[CreatePostPage]")
-
-    @pytest.fixture(scope="function")
-    def open_start_page(self):
-        """Open Start page"""
-        # create driver
-        driver = webdriver.Chrome(DRIVER_PATH)
-        # open Start Page URL
-        driver.get(BASE_URL)
-        driver.implicitly_wait(1)
-        # Steps
-        yield StartPage(driver)
-        # Close driver
-        driver.close()
 
     @pytest.fixture(scope="function")
     def primary_user(self, open_start_page):
@@ -79,6 +63,23 @@ class TestCreatePostPage:
         open_create_post_page.verify_not_unique_post()
         self.log.info("Message that post is not unique is appeared")
 
+    # def test_checkbox_is_selected(self, open_create_post_page):
+    #     """
+    #     Pre-conditions:
+    #     - Sign Up/Sign In as the user
+    #     - Navigate to Create Post Page
+    #     Steps:
+    #     - Activate the checkbox
+    #     - Verify the checkbox is selected
+    #     """
+    #
+    #     open_create_post_page.click_checkbox()
+    #     sleep(3)
+    #
+    #     # Verify the checkbox is selected
+    #     open_create_post_page.verify_checkbox()
+    #     self.log.info("Checkbox is activated")
+
     def test_create_unique_post(self, open_create_post_page):
         """
         Pre-conditions:
@@ -107,6 +108,84 @@ class TestCreatePostPage:
         # Verify the post is not unique
         open_create_post_page.verify_unique_post()
         self.log.info("Message that post is unique is appeared")
+
+    def test_create_public_post(self, open_create_post_page):
+        """
+        Pre-conditions:
+        - Sign Up/Sign In as the user
+        - Navigate to Create Post Page
+        Steps:
+        - Open select, choose private value
+        - Create new post
+        - Verify the post creating
+        - Verify the post is public
+        """
+
+        # Create new post
+        new_post = Post()
+        new_post.post_random_data()
+        open_create_post_page.create_post(new_post)
+
+        # Verify the post creating
+        open_create_post_page.verify_successfully_create_post()
+        self.log.info("Message that post is successfully created is appeared")
+
+        # Verify the post is not unique
+        open_create_post_page.verify_public_post()
+        self.log.info("Message that post is public is appeared")
+
+    def test_create_private_post(self, open_create_post_page):
+        """
+        Pre-conditions:
+        - Sign Up/Sign In as the user
+        - Navigate to Create Post Page
+        Steps:
+        - Open select, choose private value
+        - Create new post
+        - Verify the post creating
+        - Verify the post is private
+        """
+
+        # Create new post
+        new_post = Post()
+        new_post.post_random_data()
+        open_create_post_page.create_post(Post(new_post.title, new_post.body, select="Приватне повідомлення"))
+
+        # Verify the post creating
+        open_create_post_page.verify_successfully_create_post()
+        self.log.info("Message that post is successfully created is appeared")
+
+        # Verify the post is not unique
+        open_create_post_page.verify_private_post()
+        self.log.info("Message that post is private is appeared")
+
+    def test_create_group_post(self, open_create_post_page):
+        """
+        Pre-conditions:
+        - Sign Up/Sign In as the user
+        - Navigate to Create Post Page
+        Steps:
+        - Open select, choose private value
+        - Create new post
+        - Verify the post creating
+        - Verify the post is group
+        """
+
+        # Open select, choose private value
+        # open_create_post_page.select(select_value="Групове повідомлення")
+
+        # Create new post
+        new_post = Post()
+        new_post.post_random_data()
+        open_create_post_page.create_post(Post(new_post.title, new_post.body, select="Групове повідомлення"))
+
+        # Verify the post creating
+        open_create_post_page.verify_successfully_create_post()
+        self.log.info("Message that post is successfully created is appeared")
+
+        # Verify the post is not unique
+        open_create_post_page.verify_group_post()
+        self.log.info("Message that post is group is appeared")
 
     def test_post_data_saved(self, open_create_post_page):
         """

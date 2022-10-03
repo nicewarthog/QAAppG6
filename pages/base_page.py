@@ -1,9 +1,8 @@
-import pyautogui
 import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
-
 
 
 class BasePage:
@@ -17,6 +16,13 @@ class BasePage:
         # додаємо метод expected_conditions + умову, що елемент буде видимий + локатор - тупл з двох параметрів (тип локатора: By,
         # і сам локатор: xpath
         return self.waiter.until(method=expected_conditions.visibility_of_element_located((By.XPATH, xpath)),
+                                 message=f"XPATH '{xpath}' is not displayed or cannot be found")
+
+    def wait_until_all_displayed(self, xpath):
+        """Wait until all elements is displayed"""
+        # додаємо метод expected_conditions + умову, що елемент буде видимий + локатор - тупл з двох параметрів (тип локатора: By,
+        # і сам локатор: xpath
+        return self.waiter.until(method=expected_conditions.visibility_of_all_elements_located((By.XPATH, xpath)),
                                  message=f"XPATH '{xpath}' is not displayed or cannot be found")
 
     def wait_until_clickable(self, xpath):
@@ -40,17 +46,16 @@ class BasePage:
         element.clear()
         element.send_keys(value)
 
+    def select_field(self, xpath, value):
+        select = Select(self.wait_until_clickable(xpath=xpath))
+        select.select_by_visible_text(value)
+
     def click(self, xpath):
         """Find and click button"""
         self.wait_until_clickable(xpath=xpath).click()
 
-    def press_enter(self):
-        """Press Enter key on keyboard"""
-        pyautogui.press('Enter')
-
     def get_element_text(self, xpath):
         """Find element and get text"""
-        # Verify error
         element = self.wait_until_displayed(xpath=xpath)
         return element.text
 

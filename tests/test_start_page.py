@@ -1,38 +1,17 @@
 import logging
 
 import pytest
-from selenium import webdriver
 
-from constants.base import DRIVER_PATH, BASE_URL
-from pages.start_page import StartPage
 from pages.utils import User
 
 
 class TestStartPage:
     log = logging.getLogger("[StartPage]")
 
-    @pytest.fixture(scope="function")
-    def open_start_page(self):
-        """Open start page"""
-        # create driver
-        driver = webdriver.Chrome(DRIVER_PATH)
-        # open Start Page URL
-        driver.get(BASE_URL)
-        driver.implicitly_wait(1)
-        # Steps
-        yield StartPage(driver)
-        # Close driver
-        driver.close()
-
-    @pytest.fixture(scope="function")
-    def random_user(self):
-        user = User()
-        user.sign_up_random_user_data()
-        return user
-
     # SIGN UP
+    # фікстури open_start_page, random_user переніс в conftest
 
-    def test_empty_fields_validation(self, open_start_page, random_user):
+    def test_empty_fields_validation(self, open_start_page):
         """
         Fixture:
         - Create driver, open page
@@ -42,7 +21,8 @@ class TestStartPage:
         - Verify validation messages above login, email and password fields
         """
 
-        # Sign Up as a user
+        # Sign Up as a user without login, email, password
+        User().sign_up_random_user_data()
         open_start_page.sign_up_and_fail(User())
         self.log.info("Sign Up with empty login, email, password")
 
@@ -54,7 +34,7 @@ class TestStartPage:
         open_start_page.verify_sign_up_empty_password_error()
         self.log.info("Password was empty")
 
-    def test_login_is_taken(self, open_start_page, random_user):
+    def test_login_is_taken(self, open_start_page):
         """
         Fixture:
         - Create driver, open page
@@ -65,8 +45,10 @@ class TestStartPage:
         - Verify error, Verify start page
         """
 
-        # Sign Up as a user
-        open_start_page.sign_up_and_fail(User("nicewarthog", random_user.email, random_user.password))
+        # Sign Up as user with used login
+        incorrect_user = User()
+        incorrect_user.sign_up_random_user_data()
+        open_start_page.sign_up_and_fail(User("nicewarthog", incorrect_user.email, incorrect_user.password))
         self.log.info("Sign Up with login, that was taken")
 
         # Verify login is taken error
@@ -110,7 +92,7 @@ class TestStartPage:
             open_start_page.verify_sign_up_taken_login_error()
             self.log.info("Login has from 3 to 30 symbols and has already taken")
 
-    def test_success_registration(self, open_start_page, random_user):
+    def test_success_registration(self, open_start_page):
         """
         Fixture:
         - Create driver, open page
@@ -121,11 +103,13 @@ class TestStartPage:
         """
 
         # Sign Up as a user
-        hello_page = open_start_page.sign_up_and_verify(random_user)
-        self.log.info("Signed Up as user %s", random_user.login)  # замість %s додається username_value
+        correct_user = User()
+        correct_user.sign_up_random_user_data()
+        hello_page = open_start_page.sign_up_and_verify(correct_user)
+        self.log.info("Signed Up as user %s", correct_user.login)  # замість %s додається username_value
 
         # Verify success
-        hello_page.verify_success_sign_up(random_user.login)
+        hello_page.verify_success_sign_up(correct_user.login)
         self.log.info("Hello message was verified, Sign Up was successfully")
 
 # pytest test_start_page.py

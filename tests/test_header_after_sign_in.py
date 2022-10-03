@@ -1,28 +1,12 @@
 import logging
 
 import pytest
-from selenium import webdriver
 
-from constants.base import DRIVER_PATH, BASE_URL
-from pages.start_page import StartPage
 from pages.utils import User
 
 
 class TestHeaderAfterSignIn:
     log = logging.getLogger("[Header]")
-
-    @pytest.fixture(scope="function")
-    def open_start_page(self):
-        """Open start page"""
-        # create driver
-        driver = webdriver.Chrome(DRIVER_PATH)
-        # open Start Page URL
-        driver.get(BASE_URL)
-        driver.implicitly_wait(1)
-        # Steps
-        yield StartPage(driver)
-        # Close driver
-        driver.close()
 
     @pytest.fixture(scope="function")
     def primary_user(self, open_start_page):
