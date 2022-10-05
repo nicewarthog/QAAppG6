@@ -108,13 +108,9 @@ class TestHeaderBeforeSignIn:
         correct_user.sign_in_correct_user_data()
         open_start_page.header_before_sign_in.sign_in_and_verify(correct_user)
 
-        # open_start_page.header_before_sign_in.click_sign_in_and_verify()
-        # from time import sleep
-        # sleep(3)
-
         # Verify success
-        open_start_page.header_after_sign_in.verify_sign_in_success()
-        self.log.info("Account name was verified, Log In was successfully")
+        open_start_page.header_after_sign_in.verify_sign_in_success(correct_user.login)  # перевірка з універсальним логіном
+        self.log.info(f"Account name {correct_user.login} was verified, Log In was successfully")
 
     def test_log_in_with_enter_key(self, open_start_page):
         """
@@ -132,5 +128,5 @@ class TestHeaderBeforeSignIn:
         open_start_page.header_before_sign_in.sign_in_with_enter(correct_user)
 
         # Verify success
-        open_start_page.header_after_sign_in.verify_sign_in_success()
-        self.log.info("Account name was verified, Log In was successfully")
+        open_start_page.header_after_sign_in.verify_sign_in_success(correct_user.login)
+        self.log.info(f"Account name {correct_user.login} was verified, Log In was successfully")

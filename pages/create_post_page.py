@@ -17,21 +17,20 @@ class CreatePostPage(BasePage):
         """Click 'Is this post unique?' checkbox"""
         self.click(xpath=self.constants.POST_CHECKBOX_XPATH)
 
-    # def verify_checkbox(self):
-    #     """Click 'Is this post unique?' checkbox"""
-    #     selected_checkbox = self.click(xpath=self.constants.POST_CHECKBOX_XPATH)
-    #     assert selected_checkbox.is_selected()
-
-    # def select(self, select):
-    #     """Open select and choose a value"""
-    #     self.select_field(xpath=self.constants.POST_SELECT_XPATH, value=select.select_value)
-
     def create_post(self, post):
         """Create post using provided values"""
-        self.select_field(xpath=self.constants.POST_SELECT_XPATH, value=post.select)
+        # Click on select list
+        self.click(xpath=self.constants.POST_SELECT_XPATH)
+        # Click on select value
+        self.click(xpath=self.constants.VISIBILITY_SELECTION_XPATH.format(option=post.select))
+        # click checkbox if it is inactive
+        if post.unique_checkbox:
+            self.click(xpath=self.constants.POST_CHECKBOX_XPATH)
         self.fill_field(xpath=self.constants.TITLE_FIELD_XPATH, value=post.title)
         self.fill_field(xpath=self.constants.BODY_FIELD_XPATH, value=post.body)
         self.click(xpath=self.constants.CREATE_POST_BUTTON_XPATH)
+        # нижче - альтернативний метод роботи з селектом, він працює в версії 02102022
+        # self.select_field(xpath=self.constants.POST_SELECT_XPATH, value=post.select)
 
     def verify_successfully_create_post(self):
         """Verify the post is successfully created message"""
@@ -52,6 +51,24 @@ class CreatePostPage(BasePage):
 
     # VERIFY SELECT VALUES
 
+    def verify_all_post_data_is_saved(self, post):
+        """Verify the post title and body data are saved"""
+        # Verify success message
+        assert self.get_element_text(xpath=self.constants.SUCCESS_MESSAGE_XPATH) == self.constants.SUCCESS_MESSAGE_TEXT
+        # Verify title
+        assert self.get_element_text(xpath=self.constants.SAVED_POST_TITLE_XPATH) == post.title
+        self.log.info(f"Actual message: {self.get_element_text(xpath=self.constants.SAVED_POST_TITLE_XPATH)}")
+        # Verify body
+        assert self.get_element_text(xpath=self.constants.SAVED_POST_BODY_XPATH.format(body=post.body)) == post.body
+        # Verify select value
+        assert self.get_element_text(xpath=self.constants.SELECT_ALL_MESSAGES_XPATH) == post.select
+        self.log.info(f"Actual message: {self.get_element_text(xpath=self.constants.SELECT_ALL_MESSAGES_XPATH)}")
+        # Verify unique checkbox value
+        if post.unique_checkbox:
+            assert "yes" in self.get_element_text(xpath=self.constants.UNIQUE_ALL_MESSAGES_XPATH)
+        else:
+            assert "no" in self.get_element_text(xpath=self.constants.UNIQUE_ALL_MESSAGES_XPATH)
+
     def verify_public_post(self):
         """Verify the post is private message"""
         assert self.get_element_text(xpath=self.constants.PUBLIC_MESSAGE_XPATH) == self.constants.PUBLIC_MESSAGE_TEXT, \
@@ -67,17 +84,10 @@ class CreatePostPage(BasePage):
         assert self.get_element_text(xpath=self.constants.GROUP_MESSAGE_XPATH) == self.constants.GROUP_MESSAGE_TEXT, \
             f"Actual message: {self.get_element_text(xpath=self.constants.GROUP_MESSAGE_XPATH)}"
 
-    def verify_post_data_is_saved(self):
-        """Verify the post title and body data are saved"""
-        assert self.get_element_text(xpath=self.constants.SUCCESS_MESSAGE_XPATH) == self.constants.SUCCESS_MESSAGE_TEXT
-        assert self.get_element_text(xpath=self.constants.SAVED_POST_BODY_XPATH) == self.constants.POST_BODY_INPUT
-        self.log.info(f"Actual message: {self.get_element_text(xpath=self.constants.SAVED_POST_BODY_XPATH)}")
-        assert self.get_element_text(xpath=self.constants.SAVED_POST_TITLE_XPATH) == self.constants.POST_TITLE_INPUT
-        self.log.info(f"Actual message: {self.get_element_text(xpath=self.constants.SAVED_POST_TITLE_XPATH)}")
-
     def go_to_edit_post(self):
         """Edit post"""
         self.click(xpath=self.constants.EDIT_POST_BUTTON_XPATH)
+        return edit_post_page
 
     def edit_post(self, post):
         """Update post using provided values"""

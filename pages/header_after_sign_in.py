@@ -26,18 +26,11 @@ class HeaderAfterSignIn(BasePage):
 
     # SIGN IN
 
-    def verify_sign_in_success(self):
+    def verify_sign_in_success(self, login):
         """Verify correct Sign In"""
-        assert self.get_element_text(
-            self.constants.ACCOUNT_NAME_XPATH) == self.constants.SIGN_IN_CORRECT_LOGIN_INPUT, \
+        login = login.lower()
+        assert self.get_element_text(self.constants.ACCOUNT_NAME_XPATH) == login, \
             f"Actual message: {self.get_element_text(self.constants.ACCOUNT_NAME_XPATH)}"
-
-    # def verify_sign_in_success(self):
-    #     """Verify correct Sign In"""
-    #     # login_text = self.get_element_text(self.constants_2.SIGN_IN_LOGIN_FIELD_XPATH)
-    #     username_text = self.get_element_text(self.constants.ACCOUNT_NAME_XPATH)
-    #     from pages.utils import User
-    #     assert username_text == self.header_before_sign_in.sign_in_and_verify(user=User())
 
     # CREATE POST
 

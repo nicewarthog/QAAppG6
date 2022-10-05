@@ -58,4 +58,3 @@ class TestChat:
         # Verify two messages
         chat.verify_messages([message_1, message_2])
         self.log.info("Messages 1 and 2 has displayed")
-        sleep(3)

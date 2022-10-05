@@ -4,6 +4,8 @@ import random
 import string
 from time import sleep
 
+from constants.create_post_page import CreatePostPageConsts
+
 
 def random_num():
     """Generate random number"""
@@ -72,13 +74,13 @@ class User:
 
 
 class Post:
-    def __init__(self, title="", body="", select="Загальнодоступне"):
+    def __init__(self, title="", body="", select=CreatePostPageConsts.PUBLIC_MESSAGE_TEXT, unique_checkbox=False):
         self.title = title
         self.body = body
         self.select = select
+        self.unique_checkbox = unique_checkbox
 
-    def post_random_data(self, title="", body="", select="Загальнодоступне"):
+    def post_random_data(self):
         """Fill fields using random data"""
         self.title = f"{random_str(15)}"
         self.body = f"{random_str(50)}"
-        self.select = "Загальнодоступне"

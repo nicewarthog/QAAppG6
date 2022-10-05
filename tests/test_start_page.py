@@ -112,4 +112,12 @@ class TestStartPage:
         hello_page.verify_success_sign_up(correct_user.login)
         self.log.info("Hello message was verified, Sign Up was successfully")
 
-# pytest test_start_page.py
+    def test_register(self, open_start_page, random_user):
+        """Альтернативний варіант з фікстурою"""
+        # Sign Up as a user
+        hello_page = open_start_page.sign_up_and_verify(random_user)
+
+        # Verify success message
+        hello_page.verify_success_sign_up(random_user.login)
+
+    # pytest test_start_page.py
