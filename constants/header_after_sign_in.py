@@ -1,6 +1,6 @@
 class HeaderAfterSignInConsts:
     # Sign In verification
-    SIGN_IN_CORRECT_LOGIN_INPUT = "nicewarthog"
+    # SIGN_IN_CORRECT_LOGIN_INPUT = "nicewarthog"
 
     # Sign Out
     ACCOUNT_NAME_XPATH = ".//span[@class='text-white mr-2']"

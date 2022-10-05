@@ -3,7 +3,8 @@ from time import sleep
 
 import pytest
 
-from pages.utils import User, Post
+from constants.create_post_page import CreatePostPageConsts
+from pages.utils import User, Post, random_str
 
 
 class TestCreatePostPage:
@@ -39,6 +40,25 @@ class TestCreatePostPage:
         open_create_post_page.create_post(new_post)
         return new_post
 
+    def test_create_private_unique_post(self, open_create_post_page):
+        """
+        Pre-conditions:
+        - Sign Up/Sign In as the user
+        - Navigate to Create Post Page
+        Steps:
+        - Fill title, body, click checkbox, select Private value, create post
+        - Verify successfully creating post
+        - Verify title, body, click checkbox, select Private value
+        """
+
+        new_post = Post(title=random_str(15), body=random_str(30), unique_checkbox=True,
+                        select=CreatePostPageConsts.PRIVATE_MESSAGE_TEXT)
+        open_create_post_page.create_post(new_post)  # сюди передається те, що ми передали на 2 рядки вище
+        sleep(3)
+
+        open_create_post_page.verify_all_post_data_is_saved(new_post)
+        self.log.info("Title, body, active checkbox, select Private value and success message s appeared")
+
     def test_create_not_unique_post(self, open_create_post_page):
         """
         Pre-conditions:
@@ -62,23 +82,6 @@ class TestCreatePostPage:
         # Verify the post is not unique
         open_create_post_page.verify_not_unique_post()
         self.log.info("Message that post is not unique is appeared")
-
-    # def test_checkbox_is_selected(self, open_create_post_page):
-    #     """
-    #     Pre-conditions:
-    #     - Sign Up/Sign In as the user
-    #     - Navigate to Create Post Page
-    #     Steps:
-    #     - Activate the checkbox
-    #     - Verify the checkbox is selected
-    #     """
-    #
-    #     open_create_post_page.click_checkbox()
-    #     sleep(3)
-    #
-    #     # Verify the checkbox is selected
-    #     open_create_post_page.verify_checkbox()
-    #     self.log.info("Checkbox is activated")
 
     def test_create_unique_post(self, open_create_post_page):
         """
@@ -149,7 +152,7 @@ class TestCreatePostPage:
         # Create new post
         new_post = Post()
         new_post.post_random_data()
-        open_create_post_page.create_post(Post(new_post.title, new_post.body, select="Приватне повідомлення"))
+        open_create_post_page.create_post(Post(new_post.title, new_post.body, select=CreatePostPageConsts.PRIVATE_MESSAGE_TEXT))
 
         # Verify the post creating
         open_create_post_page.verify_successfully_create_post()
@@ -171,13 +174,10 @@ class TestCreatePostPage:
         - Verify the post is group
         """
 
-        # Open select, choose private value
-        # open_create_post_page.select(select_value="Групове повідомлення")
-
         # Create new post
         new_post = Post()
         new_post.post_random_data()
-        open_create_post_page.create_post(Post(new_post.title, new_post.body, select="Групове повідомлення"))
+        open_create_post_page.create_post(Post(new_post.title, new_post.body, select=CreatePostPageConsts.GROUP_MESSAGE_TEXT))
 
         # Verify the post creating
         open_create_post_page.verify_successfully_create_post()
@@ -205,7 +205,7 @@ class TestCreatePostPage:
         open_create_post_page.create_post(Post(new_post.title, new_post.body))
 
         # Verify the post data is saved
-        open_create_post_page.verify_post_data_is_saved()
+        open_create_post_page.verify_all_post_data_is_saved()
         self.log.info("The saved data is same to entered data")
 
     def test_edit_post(self, open_create_post_page, create_new_post):
@@ -221,9 +221,9 @@ class TestCreatePostPage:
 
         # Edit Post
         open_create_post_page.go_to_edit_post()  # дані вводяться в pages.utils
-        edited_post = Post()
-        edited_post.post_random_data()
-        open_create_post_page.edit_post(Post(title="Title is updated", body="Body content is updated"))
+        edited_post = Post(title="Title is updated", body="Body content is updated")
+        # edited_post.post_random_data()
+        open_create_post_page.edit_post(edited_post)
         sleep(3)
 
         # Verify the result

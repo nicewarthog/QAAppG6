@@ -14,10 +14,10 @@ class HelloPage(BasePage):
 
     def verify_success_sign_up(self, login):
         """Verify success Sign Up using Hello message"""
-        username = login.lower()
+        login = login.lower()
         # Перевірка, що в Hello message є зареєстрований username
         assert self.get_element_text(self.constants.HELLO_MESSAGE_XPATH) == self.constants.HELLO_MESSAGE_TEXT.format(
-            username=username), f"Actual message: {self.get_element_text(self.constants.HELLO_MESSAGE_XPATH)}"
+            login=login), f"Actual message: {self.get_element_text(self.constants.HELLO_MESSAGE_XPATH)}"
         # Перевірка тільки зареєстрованого username
-        assert self.get_element_text(self.constants.HELLO_MESSAGE_USERNAME_XPATH) == username, \
+        assert self.get_element_text(self.constants.HELLO_MESSAGE_USERNAME_XPATH) == login, \
             f"Actual message: {self.get_element_text(self.constants.HELLO_MESSAGE_USERNAME_XPATH)}"

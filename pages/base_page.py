@@ -46,9 +46,10 @@ class BasePage:
         element.clear()
         element.send_keys(value)
 
-    def select_field(self, xpath, value):
-        select = Select(self.wait_until_clickable(xpath=xpath))
-        select.select_by_visible_text(value)
+    # нижче - альтернативний метод роботи з селектом, він працює в версії 02102022
+    # def select_field(self, xpath, value):
+    #     select = Select(self.wait_until_clickable(xpath=xpath))
+    #     select.select_by_visible_text(value)
 
     def click(self, xpath):
         """Find and click button"""
